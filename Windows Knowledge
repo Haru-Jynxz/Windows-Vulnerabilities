@@ -1,0 +1,8 @@
+Windows OS's have been developed in C programming language making them
+vulnerable to buffer overflows, arbitrary code exec etc. By default, Windows
+is not configured to run securely and require a proactive implementation of
+security practices. Newly discovered vulnerabilities are not immediately patched
+by Microsoft and given the fragmented nature of Windows, many systems are left
+unpatched. Windows is also vulnerable to cross platform vulnerabilities for 
+example SQL injecion attacks. 
+
