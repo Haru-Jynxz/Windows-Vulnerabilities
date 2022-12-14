@@ -10,6 +10,7 @@ example SQL injecion attacks.
 getsystem ( this will try some common techniques for priv escalation )
 
 ** assuming this fails we can try something else to suggest what the system is vulnerable to**
+multi/recon/local_exploit_suggester (can be used to identify kernel exploits on a Windows target)
 msfconsole
 search suggester
 use
