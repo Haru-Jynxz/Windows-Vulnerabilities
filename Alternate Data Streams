@@ -1,0 +1,20 @@
+Alternate Data Streams (ADS) is an NTFS (Default format for Windows installations) and was designed to provide compatibility with the MacOS Hierarchial File System.
+
+Any file create on an NTFS formatted drive will have two different forks/streams:
+  Data stream - Default stream that contains the data of the file (like the text of a text file)
+  Resource stream - Typically contains the metadata of the file (like duration of a song, composer, artist, just information about the data, like the                    properties section of a file)
+  
+Attackers can use ADS to hide malicous code or executables in legit files in order to evade detection.
+
+This can be done by storing the malicious code or executables in the file attribute resource stream (metadata) of a legit file.
+
+This technique is usually used to evade basic signature based AVs and static scanning tools.
+
+On a Windows machine if you go to command prompt and do as follows:
+notepad <name of txt file you want> (this will create a text file)
+**enter in any text you want here, this will be visible and non-hidden**
+notepad code.txt:hidden.txt (this calls upon the text file you made but the : indicates you are now opening a file which will be stored in the file originally created**
+type payload.exe > test.txt:winpeas.exe
+start test.txt:winpeas.exe (this may fail)
+mklink <any name>.exe C:\Temp\test.txt:winpeas.exe (this will make a symbolic link and execute this .exe anytime you enter in test.txt into command prompt. So you could name it windowsupdate and type that into the CMD Prompt, then winpeas.exe will update because you made the symbolic link beforehand)
+
