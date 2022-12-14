@@ -6,3 +6,11 @@ by Microsoft and given the fragmented nature of Windows, many systems are left
 unpatched. Windows is also vulnerable to cross platform vulnerabilities for 
 example SQL injecion attacks. 
 
+** if you already have a shell on the windows system we can try some techniques **
+getsystem ( this will try some common techniques for priv escalation )
+
+** assuming this fails we can try something else to suggest what the system is vulnerable to**
+msfconsole
+search suggester
+use
+** specify the session you have running in the background assuming you have a shell on the target already **
